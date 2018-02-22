@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mhacks.app.R
-import com.mhacks.app.di.common.DaggerDialogFragment
+import com.mhacks.app.di.common.BaseDialogFragment
 import com.mhacks.app.data.models.User
 import com.mhacks.app.di.module.AuthModule
 import com.mhacks.app.ui.ticket.presenter.TicketDialogPresenter
@@ -21,7 +21,9 @@ import javax.inject.Inject
 /**
  * Fragment to display user information and show their QR code
  */
-class TicketDialogFragment : DaggerDialogFragment(), TicketDialogView {
+class TicketDialogFragment: BaseDialogFragment(), TicketDialogView {
+
+    override var layoutResourceID = R.layout.fragment_ticket_dialog
 
     @Inject lateinit var ticketDialogPresenter: TicketDialogPresenter
 
@@ -47,7 +49,7 @@ class TicketDialogFragment : DaggerDialogFragment(), TicketDialogView {
             dialog.setCanceledOnTouchOutside(true)
             dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-        return inflater.inflate(R.layout.fragment_ticket_dialog, container)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,44 +65,25 @@ class TicketDialogFragment : DaggerDialogFragment(), TicketDialogView {
                 .bitmap()
         ticket_qr_code_image_view.setImageBitmap(qr)
         ticket_full_name_text_view.text = user.fullName
-        if (user.university!!.isEmpty())
+        if (user.university == null)
             ticket_school_text_view.text = getString(R.string.no_school)
-        else
-            ticket_school_text_view.text = user.university
+        else {
+            if (user.university?.isEmpty()!!)
+                ticket_school_text_view.text = getString(R.string.no_school)
+            else
+                ticket_school_text_view.text = user.university
+        }
         showMainContent()
     }
 
     override fun onGetUserFailure(error: Throwable) {
-        Timber.e(error)
         if (error is UnknownHostException) {
-            showError()
-            ticket_error_view.tryAgainCallback = {
-                showProgressBar()
-                ticketDialogPresenter.getUser() }
+            showErrorView(R.string.loading_ticket, {
+                showProgressBar(getString(R.string.loading_ticket))
+                ticketDialogPresenter.getUser()
+            })
         }
         else callback?.startLoginActivity()
-    }
-
-    private fun showProgressBar() {
-        ticket_progressbar.visibility = View.VISIBLE
-        ticket_main.visibility = View.INVISIBLE
-        ticket_error_view.visibility = View.INVISIBLE
-    }
-
-    private fun showMainContent() {
-        ticket_progressbar.visibility = View.INVISIBLE
-        ticket_main.visibility = View.VISIBLE
-        ticket_error_view.visibility = View.INVISIBLE
-    }
-
-    private fun showError() {
-        ticket_error_view.removeBackground()
-        ticket_error_view.titleText = R.string.ticket_network_error
-        ticket_error_view.iconDrawable = R.drawable.ic_cloud_off_black_24dp
-        ticket_error_view.textColor = R.color.colorPrimaryDark
-        ticket_progressbar.visibility = View.INVISIBLE
-        ticket_main.visibility = View.INVISIBLE
-        ticket_error_view.visibility = View.VISIBLE
     }
 
     interface Callback {

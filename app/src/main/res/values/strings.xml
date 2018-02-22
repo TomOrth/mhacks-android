@@ -69,6 +69,7 @@
     <string name="ticket_network_error">Couldn\'t fetch ticket.</string>
     <string name="logging_in_auth_error">Username or password is incorrect.</string>
     <string name="ticket_description">My ticket.</string>
+    <string name="loading_ticket">Loading ticket…</string>
 
     <!--Event Fragment-->
     <string name="loading_events">Loading events…</string>

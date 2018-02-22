@@ -59,22 +59,16 @@ abstract class BaseActivity: DaggerAppCompatActivity(),  NavigationFragment.OnNa
     override fun addPadding() {
         val height: Int = ResourceUtil.convertDpResToPixel(context = this,
                 res = R.dimen.toolbar_height)
-        fragment_container.setPadding(0, height, 0, 0)
+        fragment_container?.setPadding(0, height, 0, 0)
     }
 
     override fun removePadding() {
-        fragment_container.setPadding(0, 0, 0, 0)
+        fragment_container?.setPadding(0, 0, 0, 0)
     }
 
     fun showToast(stringRes: Int) {
         Toast.makeText(this,
                 stringRes,
-                Toast.LENGTH_LONG).show()
-    }
-
-    fun showToast(string: String) {
-        Toast.makeText(this,
-                string,
                 Toast.LENGTH_LONG).show()
     }
 }

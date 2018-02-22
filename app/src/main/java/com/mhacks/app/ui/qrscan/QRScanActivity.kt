@@ -65,7 +65,9 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
 
     private var hasAutoFocus = false
 
-    private var useFlash = false
+    private var hasFlash = false
+
+    private var camera: Camera? = null
 
     @Inject lateinit var qrScanPresenter: QRScanPresenter
 
@@ -84,13 +86,13 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
         if (rc == PackageManager.PERMISSION_GRANTED) {
             qrScanPresenter.getCameraSettings()
             activity_camera_source_flash_icon.setOnClickListener {
-                useFlash = !useFlash
-                qrScanPresenter.updateCameraSettings(hasAutoFocus, useFlash)
+                hasFlash = !hasFlash
+                qrScanPresenter.updateCameraSettings(hasAutoFocus, hasFlash)
 
             }
             activity_camera_source_autofocus_icon.setOnClickListener {
                 hasAutoFocus = !hasAutoFocus
-                qrScanPresenter.updateCameraSettings(hasAutoFocus, useFlash)
+                qrScanPresenter.updateCameraSettings(hasAutoFocus, hasFlash)
             }
         } else {
             requestCameraPermission()
@@ -190,7 +192,7 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
 
         cameraSource = builder
                 .setFocusMode(if (this.hasAutoFocus) Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE else null)
-                .setFlashMode(if (this.useFlash) Camera.Parameters.FLASH_MODE_TORCH else null)
+                .setFlashMode(if (this.hasFlash) Camera.Parameters.FLASH_MODE_TORCH else null)
                 .build()
     }
 
@@ -200,6 +202,10 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
     override fun onResume() {
         super.onResume()
         startCameraSource()
+        camera?.let {
+            try { updateCameraSettings(hasFlash, hasAutoFocus) }
+            catch (e: NullPointerException) { }
+        }
     }
 
     /**
@@ -399,7 +405,7 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
 
     override fun onGetCameraSettings(settings: Pair<Boolean, Boolean>) {
         hasAutoFocus = settings.first
-        useFlash = settings.second
+        hasFlash = settings.second
 
         val colorAccent =
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorAccent))
@@ -408,7 +414,7 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
         else ImageViewCompat.setImageTintList(activity_camera_source_autofocus_icon,
                 ColorStateList.valueOf(Color.WHITE))
 
-        if (useFlash) ImageViewCompat.setImageTintList(activity_camera_source_flash_icon, colorAccent)
+        if (hasFlash) ImageViewCompat.setImageTintList(activity_camera_source_flash_icon, colorAccent)
         else ImageViewCompat.setImageTintList(activity_camera_source_flash_icon,
                 ColorStateList.valueOf(Color.WHITE))
         createCameraSource()
@@ -422,14 +428,13 @@ class QRScanActivity: BaseActivity(), QRScanView, BarcodeGraphicTracker.BarcodeU
         else ImageViewCompat.setImageTintList(activity_camera_source_autofocus_icon,
                 ColorStateList.valueOf(Color.WHITE))
 
-        if (useFlash)
+        if (hasFlash)
             ImageViewCompat.setImageTintList(activity_camera_source_flash_icon, colorAccent)
         else ImageViewCompat.setImageTintList(activity_camera_source_flash_icon,
                 ColorStateList.valueOf(Color.WHITE))
-        updateCameraSettings(useFlash, hasAutoFocus)
+        updateCameraSettings(hasFlash, hasAutoFocus)
     }
 
-    private var camera: Camera? = null
     private fun updateCameraSettings(hasFlash: Boolean, hasAutoFocus: Boolean) {
         camera = getCamera(cameraSource!!)
         if (camera != null) {

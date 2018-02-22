@@ -104,9 +104,9 @@ class MainActivity : BaseActivity(), MainView,
     private fun startQRScanActivity() =
             startActivity(Intent(this, QRScanActivity::class.java))
 
-    private fun startCreateAnnouncementDialogFragment() {
-        CreateAnnouncementDialogFragment.instance.show(supportFragmentManager, null)
-    }
+    private fun startCreateAnnouncementDialogFragment() =
+        CreateAnnouncementDialogFragment.instance
+                .show(supportFragmentManager, null)
 
     private fun showAdminOptions() {
         val colors = arrayOf<CharSequence>("Scan ticket", "Post an announcement", "Ticket")

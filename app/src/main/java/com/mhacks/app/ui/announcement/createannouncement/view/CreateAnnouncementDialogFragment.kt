@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mhacks.app.R
-import com.mhacks.app.di.common.DaggerDialogFragment
+import com.mhacks.app.di.common.BaseDialogFragment
 
 /**
  * Fragment used to create and post a new announcement.
  */
-class CreateAnnouncementDialogFragment: DaggerDialogFragment(), CreateAnnouncementView {
+class CreateAnnouncementDialogFragment : BaseDialogFragment(), CreateAnnouncementView {
 
+    override var layoutResourceID = R.layout.fragment_create_announcements
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_create_announcements, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
     }
 
     override fun onCreateAnnouncementSuccess() {
@@ -28,7 +28,8 @@ class CreateAnnouncementDialogFragment: DaggerDialogFragment(), CreateAnnounceme
     }
 
     companion object {
-         val instance = CreateAnnouncementDialogFragment()
 
+        val instance
+            get() = CreateAnnouncementDialogFragment()
     }
 }

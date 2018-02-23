@@ -1,12 +1,13 @@
 package com.mhacks.app.ui.announcement.createannouncement.view
 
-/**
- * Created by jeffreychang on 2/21/18.
- */
+import com.mhacks.app.data.models.CreateAnnouncement
 
+/**
+ * View contract of Create Announcement Fragment.
+ */
 interface CreateAnnouncementView {
 
-    fun onCreateAnnouncementSuccess()
+    fun onPostAnnouncementSuccess(createAnnouncement: CreateAnnouncement)
 
-    fun onCreateAnnouncementFailure()
+    fun onPostAnnouncementFailure(error: Throwable)
 }

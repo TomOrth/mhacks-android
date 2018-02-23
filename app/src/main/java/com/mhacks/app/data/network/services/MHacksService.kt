@@ -32,6 +32,15 @@ interface MHacksService {
     @GET("announcements")
     fun getAnnouncementResponse(): Single<AnnouncementResponse>
 
+    @POST("announcements")
+    @FormUrlEncoded
+    fun postAnnouncement(@Field("title") title: String,
+                         @Field("category") category: String,
+                         @Field("body") body: String,
+                         @Field("isApproved") isApproved: Boolean,
+                         @Field("isSent") isSent: Boolean,
+                         @Field("push") push: Boolean): Single<CreateAnnouncement>
+
     @GET("event")
     fun getEventResponse(): Single<EventsResponse>
 

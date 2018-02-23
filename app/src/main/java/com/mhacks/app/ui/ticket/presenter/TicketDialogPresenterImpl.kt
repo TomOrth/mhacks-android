@@ -43,7 +43,7 @@ class TicketDialogPresenterImpl @Inject constructor(
                             .subscribe()
                 }
                 .delay(500, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { ticketDialogView.onGetUserSuccess(it) },

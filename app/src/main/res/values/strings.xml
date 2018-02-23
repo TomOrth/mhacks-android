@@ -99,4 +99,10 @@
     <string name="not_valid_email">Not a valid e-mail address.</string>
     <string name="checked_in">Checked in!</string>
 
+    <!--Create Announcement Fragment-->
+    <string name="title">Title</string>
+    <string name="category">Category</string>
+    <string name="body">Body</string>
+    <string name="post">post</string>
+
 </resources>

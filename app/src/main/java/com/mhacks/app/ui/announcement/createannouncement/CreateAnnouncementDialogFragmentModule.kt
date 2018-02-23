@@ -2,6 +2,7 @@ package com.mhacks.app.ui.announcement.createannouncement
 
 import com.mhacks.app.data.network.services.MHacksService
 import com.mhacks.app.data.room.MHacksDatabase
+import com.mhacks.app.di.module.AuthModule
 import com.mhacks.app.ui.announcement.createannouncement.presenter.CreateAnnouncementPresenter
 import com.mhacks.app.ui.announcement.createannouncement.presenter.CreateAnnouncementPresenterImpl
 import com.mhacks.app.ui.announcement.createannouncement.view.CreateAnnouncementDialogFragment
@@ -27,7 +28,13 @@ abstract class CreateAnnouncementDialogFragmentModule {
         @JvmStatic
         fun provideCreateAnnouncementPresenter(createAnnouncementView: CreateAnnouncementView,
                                                mHacksService: MHacksService,
-                                               mHacksDatabase: MHacksDatabase): CreateAnnouncementPresenter =
-                CreateAnnouncementPresenterImpl(createAnnouncementView, mHacksService, mHacksDatabase)
+                                               mHacksDatabase: MHacksDatabase,
+                                               authInterceptor: AuthModule.AuthInterceptor)
+                : CreateAnnouncementPresenter =
+                CreateAnnouncementPresenterImpl(
+                        createAnnouncementView,
+                        mHacksService,
+                        mHacksDatabase,
+                        authInterceptor)
     }
 }

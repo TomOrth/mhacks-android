@@ -8,6 +8,7 @@ import com.mhacks.app.ui.common.BasePresenterImpl
 import com.mhacks.app.ui.qrscan.view.QRScanView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -28,7 +29,8 @@ class QRScanPresenterImpl @Inject constructor(
 
     override fun verifyTicket(email: String) {
         mHacksDatabase.loginDao().getLogin()
-                .flatMap { authInterceptor.token = it.token
+                .flatMap {
+                    authInterceptor.token = it.token
                     mHacksService.verifyUserTicket(email) }
                 .map { it.feedback }
                 .subscribeOn(Schedulers.newThread())

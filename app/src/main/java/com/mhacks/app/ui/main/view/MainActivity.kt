@@ -2,6 +2,7 @@ package com.mhacks.app.ui.main.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.MenuItem
@@ -104,9 +105,11 @@ class MainActivity : BaseActivity(), MainView,
     private fun startQRScanActivity() =
             startActivity(Intent(this, QRScanActivity::class.java))
 
-    private fun startCreateAnnouncementDialogFragment() =
-        CreateAnnouncementDialogFragment.instance
-                .show(supportFragmentManager, null)
+    private fun startCreateAnnouncementDialogFragment() {
+        val fragment = CreateAnnouncementDialogFragment.instance
+        fragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_AppCompat_Light_Dialog)
+        fragment.show(supportFragmentManager, null)
+    }
 
     private fun showAdminOptions() {
         val colors = arrayOf<CharSequence>("Scan ticket", "Post an announcement", "Ticket")

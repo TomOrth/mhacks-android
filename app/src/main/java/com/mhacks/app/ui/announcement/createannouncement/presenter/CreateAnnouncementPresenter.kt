@@ -8,5 +8,5 @@ import com.mhacks.app.ui.common.BasePresenter
 
 interface CreateAnnouncementPresenter: BasePresenter {
 
-    fun postAnnouncement()
+    fun postAnnouncement(title: String, category: String, body: String)
 }

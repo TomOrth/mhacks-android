@@ -36,14 +36,6 @@ class TicketDialogFragment: BaseDialogFragment(), TicketDialogView {
         callback = activity as? Callback
     }
 
-    override fun onResume() {
-        val width = (resources.displayMetrics.widthPixels * .85).toInt()
-        val height = (resources.displayMetrics.heightPixels * .7).toInt()
-
-        dialog.window.setLayout(width, height)
-        super.onResume()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (dialog != null) {
             dialog.setCanceledOnTouchOutside(true)

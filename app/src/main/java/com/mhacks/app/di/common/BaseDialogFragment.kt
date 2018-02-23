@@ -2,6 +2,7 @@ package com.mhacks.app.di.common
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatDialogFragment
 import android.view.LayoutInflater
@@ -44,6 +45,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), HasSupportFragmen
         val layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.TitleDialog)
         parent.layoutParams = layoutParams
         progressBarView.layoutParams = layoutParams
         errorView.layoutParams = layoutParams
@@ -53,8 +55,15 @@ abstract class BaseDialogFragment : AppCompatDialogFragment(), HasSupportFragmen
         parent.addView(mainView)
         parent.addView(progressBarView)
         parent.addView(errorView)
-
         return parent
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        val width = (resources.displayMetrics.widthPixels * .85).toInt()
+        val height = (resources.displayMetrics.heightPixels * .7).toInt()
+        dialog.window.setLayout(width, height)
     }
 
     fun showProgressBar(loadingText: String) {
